@@ -59,6 +59,19 @@ app.delete('/:id', (req, res) => {
     );
 })
 
+app.put('/:id', (req, res) => {
+    db.query(
+      'UPDATE employees SET name=?, age=?, country=?, position=?, wage=? WHERE id=?',
+      [req.body.name, req.body.age, req.body.country, req.body.position, req.body.wage, req.body.id],
+      (err, result) => {
+          if(err) res.send(err)
+          else {
+              db.query('SELECT * FROM employees', (e, r) => res.send(r));
+          }
+      }
+    );
+})
+
 app.listen(3010, () => {
     console.log('app is listen to port 3010');
 })

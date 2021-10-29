@@ -3,6 +3,7 @@ import './App.css';
 import { useState, useEffect } from 'react'
 import Axios from 'axios';
 
+
 function App() {
 
   const [data, setData] = useState();
@@ -39,6 +40,18 @@ function App() {
     Axios.delete(url + '/' + empId).then((res)=> setEmployeeList(res.data));
   }
 
+  const updateEmployee = (empId) => {
+    const data = {
+      id : empId,
+      name: name,
+      age: age,
+      country: country,
+      position: position,
+      wage: wage
+    }
+    Axios.put(url+ '/' + empId, data).then((res)=> setEmployeeList(res.data))
+  }
+
   useEffect(()=> {
     const fetchData = async() => {
       const res = await fetch('http://127.0.0.1:3010');
@@ -50,9 +63,6 @@ function App() {
     fetchData();
   }, [setData])
 
-  function display() {
-    console.log(name + age + country + position + wage)
-  }
 
   return (
     <div className='App'>
@@ -101,34 +111,42 @@ function App() {
       </button>
       <table>
         <thead>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Country</th>
-          <th>Position</th>
-          <th>Wage</th>
-          <th>Delete</th>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Country</th>
+            <th>Position</th>
+            <th>Wage</th>
+            <th>Delete</th>
+            <th>Update</th>
+          </tr>
         </thead>
         <tbody>
-          {
-            employeeList.map((emp, key) => {
-              return (
-                <tr key={emp.id}>
-                  <td>{emp.name}</td>
-                  <td>{emp.age}</td>
-                  <td>{emp.country}</td>
-                  <td>{emp.position}</td>
-                  <td>{emp.wage}</td>
-                  <td>
-                    <button
-                     style={{backgroundColor: 'red'}} 
-                     onClick={() => deleteEmployee(emp.id)}>
-                      Delete
-                    </button>
-                    </td>
-                </tr>
-              );
-            })
-          }
+          {employeeList.map((emp, key) => {
+            return (
+              <tr key={emp.id}>
+                <td>{emp.name}</td>
+                <td>{emp.age}</td>
+                <td>{emp.country}</td>
+                <td>{emp.position}</td>
+                <td>{emp.wage}</td>
+                <td>
+                  <button
+                    style={{ backgroundColor: 'red' }}
+                    onClick={() => deleteEmployee(emp.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+                <td>
+                  <button
+                    style={{backgroundColor: 'green'}}
+                    onClick={()=> updateEmployee(emp.id)}
+                  >Updaet</button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
