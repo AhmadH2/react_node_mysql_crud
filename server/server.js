@@ -39,7 +39,7 @@ app.post('/create', (req, res)=> {
                 res.send(err)
             }
             else {
-                res.send('Values Inserted')
+                db.query('SELECT * FROM employees', (e, r) => res.send(r));
             }
     });
 })
